@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# clean-up: Script to remove all .exe and .pdb files from a directory
+
+# 1: list all files and directories within the root directory
+
+# 2: if it's a file, check if it has a .exe or .pdb extension
+
+		# 2a if it does, remove the file
+
+# 3: if it's a directory, recursively start clean-up again in the child directory
+
+# ===============================================================================
+
+
+# set the current directory to the first argument
+curr_dir="$1"
+
+# if clean-up is called without arguments, set current directory to "."
+[[ -z $curr_dir ]] && curr_dir="."
+
+# check if directory exists, if not: print error and exit
+if [[ ! -d "$curr_dir" ]]; then
+		echo "Usage: clean-up [DIRECTORY]" >&2
+		exit 1
+fi
+
+# check if we can move to the directory
+if ! cd "$curr_dir"; then
+		echo "Cannot cd to directory" >&2
+		exit 1
+fi
+
+# loop through lines of ls output
+for i in `ls | cat`; do
+		# if listing is a file, check if it has .exe or .pdb extensions
+		if [[ -f "$i" ]]; then
+				case "$i" in
+
+						# ask for confirmation before removal
+						# (added pwd to print full path to the file in case of ambiguous file names)
+						*.exe | *.pdb)			read -p "Would you like to remove `pwd`/$i (Y/n)? " answer 
+
+												# error message if removal fails, but keep the program running
+												case "$answer" in
+														Y | y)				if ! rm "$i"; then
+																				echo "Failed to remove file: $i" >&2
+																		    fi ;;
+														* )					continue ;;
+												esac ;;
+				esac
+		elif [[ -d "$i" ]]; then
+				clean-up "$i"
+		fi
+done
