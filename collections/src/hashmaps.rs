@@ -1,6 +1,6 @@
 // We need to first `use` the `HashMap` from the
 // collections portion of the standard library.
-use std::collection::HashMap;
+use std::collections::HashMap;
 // It's not included in the features brought
 // into scope automatically in the prelude.
 
