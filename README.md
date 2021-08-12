@@ -45,3 +45,7 @@
 ## Chapter 8: Common Collections
 
 + collections
+
+## Chapter 9: Error Handling
+
++ error_handling
